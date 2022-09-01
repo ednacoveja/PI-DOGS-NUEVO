@@ -1,0 +1,136 @@
+//SIN MODULARIZAR
+
+
+/*const { Router } = require("express");
+const axios = require("axios");
+const { Dog, Temperament } = require("../db.js");
+// Importar todos los routers;
+// Ejemplo: const authRouter = require('./auth.js');
+
+const router = Router();
+const { API_KEY } = process.env;
+
+const getAllAPI = async () => {
+  const API = await axios.get(
+    `https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`
+  );
+
+  const API_INFO = await API.data.map((dog) => {
+    let temperament_array = [];
+    if (dog.temperament) {
+      temperament_array = dog.temperament.split(", ");
+    }
+    let altura_array = [];
+    if (dog.height) {
+      altura_array = dog.height.metric.split(" - ");
+    }
+    let peso_array = [];
+    if (dog.weight) {
+      peso_array = dog.weight.metric.split(" - ");
+    }
+    return {
+      id: dog.id,
+      name: dog.name,
+      height: altura_array,
+      weight: peso_array,
+      image: dog.image.url,
+      life_span: dog.life_span,
+      temperament: temperament_array,
+    };
+  });
+  return API_INFO;
+};
+
+const getAllDB = async () => {
+  return await Dog.findAll({
+    include: {
+      model: Temperament,
+      attributes: ["name"],
+      through: { attributes: [] },
+    },
+  });
+};
+
+const getAllDogs = async () => {
+  const apiInfo = await getAllAPI(); //guardamos en una constante el array de todos los characteres que esten en la API
+  const dbInfo = await getAllDB(); //guardamos en una constante un array de todos los characters que esten en la base de datos (los que crea el usuario)
+  const infoTotal = apiInfo.concat(dbInfo); //concatenamos ambos arrays en uno solo
+  return infoTotal; // retornamos dicho array
+};
+
+// Configurar los routers
+// Ejemplo: router.use('/auth', authRouter);
+
+router.get("/dogs", async (req, res) => {
+  const { name } = req.query;
+  let dogsTotal = await getAllDogs();
+  if (name) {
+    let dogName = await dogsTotal.filter((e) =>
+      e.name.toLowerCase().includes(name.toLowerCase())
+    );
+    dogName.length
+      ? res.status(200).send(dogName)
+      : res.status(404).send("Dog not found.Sorry!");
+  } else {
+    res.status(200).send(dogsTotal);
+  }
+});
+
+router.get("/dogs/:idRaza", async (req, res) => {
+  const { idRaza } = req.params;
+  const allDogs = await getAllDogs();
+  if (idRaza) {
+    let buscar = await allDogs.filter((dog) => dog.id == idRaza);
+    buscar.length
+      ? res.status(200).json(buscar)
+      : res.status(404).send("no se encontro");
+  }
+});
+
+router.get("/temperaments", async (req, res) => {
+  const infoGET = await axios.get(`http://localhost:3001/dogs`);
+  const array_temperaments = infoGET.data.map((dog) => dog.temperament);
+  const temps = array_temperaments.toString().split(",");
+  temps.forEach((temp) => {
+    Temperament.findOrCreate({
+      //findOrCreate busca si esta entidad ya esta creada en el modelo si si no hace nada de lo contrario la crea
+      where: { name: temp }, // cada occupation sera el elemento que se itera en el array
+    });
+  });
+  const allTemperaments = await Temperament.findAll();
+  res.send(allTemperaments);
+});
+
+router.post("/dogs", async (req, res) => {
+  const {
+    name,
+    height_min,
+    height_max,
+    weight_min,
+    weight_max,
+    image,
+    life_span,
+    temperament,
+  } = req.body;
+
+  const fixedHeight = [];
+  fixedHeight.push(height_min, height_max);
+  const fixedWeight = [];
+  fixedWeight.push(weight_min, weight_max);
+
+  let createDog = await Dog.create({
+    name,
+    height:fixedHeight,
+    weight:fixedWeight,
+    image,
+    life_span,
+  });
+
+  const buscarTemps_db=await Temperament.findAll({
+    where:{name:temperament}
+  })
+  createDog.addTemperament(buscarTemps_db)
+  res.send("Perro creado con exito")
+
+});
+module.exports = router;*/
